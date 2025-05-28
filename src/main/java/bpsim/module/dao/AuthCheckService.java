@@ -27,7 +27,7 @@ public class AuthCheckService extends AbstractDao implements BpsimCommon{
 	}
 	
 	public void insert(String queryId, Map args) throws SQLException {
-		regist(queryId, args);
+		regist(queryId, args); 
 		
 	}
 	
