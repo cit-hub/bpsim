@@ -2059,6 +2059,10 @@ public class ExpertExcelController {
         String encodedFileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
         String filePath = DOWNLOAD_DIR_ABS_PATH + fileName;        
         File file = new File(filePath);		
+//        System.out.println("파일패쓰화긴~~"+filePath); 
+//        System.out.println("다운로드 dir 패쓰 확~~"+DOWNLOAD_DIR_ABS_PATH); 
+//        System.out.println("컨투ㅡ롤러 넘어오냐 ㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈㅈsdsds");
+//        System.out.println("file.exists() = " + file.exists());
         if (!file.exists()) {
             // 파일이 없을 경우 처리 (예: 404 에러 반환)
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "파일을 찾을 수 없습니다.");

@@ -2,6 +2,8 @@ package bpsim.module.ctr.expert;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -103,12 +106,13 @@ public class ExpertController {
 		mav.addObject("newBioLargeCode", newBioLargeCode);
 		mav.addObject("pageNavigator", pageNavigator.getMakePage());
 		mav.addObject("totalCnt", totalCnt);
-		mav.addObject("totalPage", totalPage);
 		mav.addObject("cPage", intPage);
 		mav.addObject("listCnt", listCnt);
 		mav.addObject("pageCnt", pageCnt);
 		mav.addObject("fullCnt", fullCnt);
-		
+		System.out.println("brthDtFromd뜨니= " + request.getParameter("brthDtFrom"));
+		System.out.println("brthDtTo뜨니 = " + request.getParameter("brthDtTo"));
+
 		return mav;
 	}
 	
@@ -212,7 +216,7 @@ public class ExpertController {
 		
 		return mav;
 	}	
-
+	
 	// 전문인력정보 상세화면
 	@RequestMapping(value = "/expert/expertDetail.do")
 	public ModelAndView expertDetail(HttpServletRequest request, HttpServletResponse response, HttpSession session)
@@ -271,6 +275,7 @@ public class ExpertController {
 			mav.setViewName("redirect:/expert/expertList.do");
 		}
 
+		System.out.println("아ㅣㄴ뜨냐~~ " + expert);
 		// 파라미터(목록에서 뷰로 갔다가 다시 목록으로 와도 해당 상태를 유지하기 위해)
 		String[] keyset = { "dateSearch", "startDate", "search1", "searchInput1", "search2", "searchInput2", "search3",
 				"searchInput3", "largeCategory1", "mediumCategory1", "smallCategory1", "largeCategory2",
@@ -296,6 +301,44 @@ public class ExpertController {
 
 		return mav;
 	}
+	/*
+	 * @RequestMapping(value = "/expert/downloadMultiPDF.do", method =
+	 * RequestMethod.POST) public void downloadMultiPDF(HttpServletRequest request,
+	 * HttpServletResponse response) throws Exception { String[] idArray =
+	 * request.getParameterValues("exprtMngNoList");
+	 * 
+	 * if (idArray == null || idArray.length == 0) {
+	 * response.sendError(HttpServletResponse.SC_BAD_REQUEST, "선택된 전문가가 없습니다.");
+	 * return; }
+	 * 
+	 * List<File> pdfFiles = new ArrayList<File>();
+	 * 
+	 * for (String exprtMngNo : idArray) { Map<String, Object> params = new
+	 * HashMap<String, Object>(); params.put("exprt_mng_no", exprtMngNo);
+	 * 
+	 * // 전문가 상세정보 조회 Map expert =
+	 * bpsimCommonService.getObjectMap("Expert.getExpertDetail", params);
+	 * 
+	 * // PDF 파일 생성 (bpsimCommonService에서 처리) File pdf =
+	 * bpsimCommonService.generateExpertPDFFile(expert); pdfFiles.add(pdf); }
+	 * 
+	 * // ZIP 파일 생성 File zipFile = bpsimCommonService.makeExpertZipFile(pdfFiles);
+	 * 
+	 * // HTTP 응답에 ZIP 파일 전송 response.setContentType("application/zip");
+	 * response.setHeader("Content-Disposition",
+	 * "attachment; filename=experts_pdf.zip"); response.setContentLength((int)
+	 * zipFile.length());
+	 * 
+	 * FileInputStream fis = new FileInputStream(zipFile); OutputStream out =
+	 * response.getOutputStream(); byte[] buffer = new byte[1024]; int len; while
+	 * ((len = fis.read(buffer)) != -1) { out.write(buffer, 0, len); }
+	 * 
+	 * fis.close(); out.flush(); out.close();
+	 * 
+	 * // 임시 파일 정리 for (File f : pdfFiles) f.delete(); zipFile.delete(); }
+	 */
+
+
 
 	// 전문인력정보 수정화면
 	@RequestMapping(value = "/expert/expertMod.do")
@@ -797,4 +840,125 @@ public class ExpertController {
 		}
 		return mav;
 	}
+
+	@RequestMapping(value="/expert/scrapFolder.do", method=RequestMethod.POST)
+	public ModelAndView createDirectory(HttpSession session, HttpServletRequest request) throws SQLException {
+	    ModelAndView mav = new ModelAndView("bpsimjsonView");
+
+	    System.out.println("넘어오긴하나");
+
+	    // 로그인 사용자 정보
+	    LoginInfoDTO loginInfo = (LoginInfoDTO) session.getAttribute("loginInfo");
+
+	    // form 방식으로 받기
+	    String dir_nm = request.getParameter("dir_nm");
+	    String dir_type = request.getParameter("dir_type");
+
+	    // 사용자 ID
+	    String userId = loginInfo.getLoginid();
+
+	    // 실제 폴더 INSERT
+	    Map<String, Object> insertParams = new HashMap<>();
+	    insertParams.put("user_id", userId);
+	    insertParams.put("dir_nm", dir_nm);
+	    insertParams.put("dir_type", dir_type);
+
+	    // INSERT 후 새로 생성된 폴더 ID 받아오기
+	    String dirId = bpsimCommonService.insertScrapFolder("Expert.insertscrapFolder", insertParams);
+
+	    // 결과 JSON으로 내려줄 Map
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("status", "success");
+	    result.put("dirId", dirId);
+	    result.put("userId", userId);
+
+	    System.out.println("map 테스트: " + result);
+
+	    // JSON View로 내려갈 데이터
+	    mav.addObject("result", result);
+
+	    return mav;
+	}
+
+	@RequestMapping("/expert/scrapFolderList.do")
+	public ModelAndView getScrapFolderList( HttpSession session) throws Exception {
+		 // 로그인 사용자 정보
+	    LoginInfoDTO loginInfo = (LoginInfoDTO) session.getAttribute("loginInfo");
+
+	
+	    // 사용자 ID
+	    String userId = loginInfo.getLoginid();
+	    
+	            
+	    Map<String, Object> paramMap = new HashMap<>();
+	        paramMap.put("user_id", userId);
+	        
+		    System.out.println("user_id뜨냐" + userId);
+	  
+
+	    List<Map<String, Object>> folderList = bpsimCommonService.getFolderList("Expert.getFolderList", paramMap);
+
+	    ModelAndView mav = new ModelAndView("bpsimjsonView");
+	    mav.addObject("folderList", folderList); // JSON 데이터 반환
+	    return mav;
+	}
+	
+	
+	@RequestMapping(value = "/expert/insertScrap.do", method = RequestMethod.POST)
+	public ModelAndView insertScrap(HttpServletRequest request) throws Exception {
+
+	    // 사용자 ID
+	    LoginInfoDTO loginInfo = (LoginInfoDTO) CommonUtil.getSession(request, "loginInfo");
+	    String userId = loginInfo != null ? loginInfo.getLoginid() : "anonymous";
+
+	    // 파라미터
+	    String[] mngNoArray = request.getParameterValues("mngNoList");
+	    String[] folderIdArray = request.getParameterValues("folderIdList");
+	    String[] typeList = request.getParameterValues("typeList");
+
+	    // null 예외처리
+	    if (mngNoArray == null || folderIdArray == null || typeList == null) {
+	        throw new IllegalArgumentException("필수 파라미터 누락");
+	    }
+
+	    ModelAndView mav = new ModelAndView("bpsimjsonView");
+	    for (int i = 0; i < mngNoArray.length; i++) {
+	        String mngNo = mngNoArray[i];
+	        String folderId = folderIdArray[i];   // 각 폴더와 관리번호가 1:1 대응일 경우
+	        String dirType = typeList[i];
+
+	        Map<String, Object> paramMap = new HashMap<String, Object>();
+	        paramMap.put("exprt_mng_no", mngNo);
+	        paramMap.put("folder_id", folderId);
+	        paramMap.put("dir_type", dirType);
+	        paramMap.put("user_id", userId);
+
+	        //전문인력정보 중복 조회
+	        Map infoErrMap = new HashedMap();
+	        infoErrMap.put("exprt_mng_no", mngNo);
+	        infoErrMap.put("folder_id", folderId);
+	        int dpcnCnt = bpsimCommonService.getScrapCount("Expert.scrapCount", infoErrMap);
+	        if( dpcnCnt <= 0) {
+	        	bpsimCommonService.insertScrap("Expert.insertScrap", paramMap);
+
+	        	mav.addObject("result", "success");
+	        	mav.addObject("message", "스크랩이 완료되었습니다.");
+
+	        }else if(dpcnCnt > 0){
+	        	
+	        	
+	        	mav.addObject("result", "duplicate");
+	        	mav.addObject("message", "이미 스크랩한 인력이 포함되어 있습니다.");
+	        	
+	        	
+	        }
+	        System.out.println("체킁 " + paramMap);
+	        System.out.println("에러체킁 " + dpcnCnt+ infoErrMap);
+	    }
+		
+	    return mav;
+	}
+
+
+
 }
