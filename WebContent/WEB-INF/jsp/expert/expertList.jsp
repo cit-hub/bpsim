@@ -507,33 +507,7 @@ table[class^='tbl_style'] th, table[class^='tbl_style'] td {
            searchForm.append(pageInput);
     	   searchForm.submit();
     	 }
-       /* function addScrap() {
-            let url = "/expert/scrapFolder.do";
-            let dir_nm = $("#dirNm").val();
-            let dir_type = $("#dirType").val();
-
-            console.log("값체크", dir_nm, dir_type);
-
-            let data = {
-                dir_nm: dir_nm,
-                dir_type: dir_type
-            };
-
-            $.ajax({
-                url: url,
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(data),
-                success: function (response) {
-                    console.log(response);
-                },
-                error: function (xhr, status, error) {
-                    console.error("에러 발생:", error);
-                }
-            });
-
-            console.log("data", data);
-        }*/
+// 스크랩 추가 함수 
         function addScrap() {
             let url = "/expert/scrapFolder.do";
             let dir_nm = $("#dirNm").val();
@@ -572,7 +546,7 @@ table[class^='tbl_style'] th, table[class^='tbl_style'] td {
 
         }
 
-
+// 스크랩 modal block 함수 
 		function scrapDirModal(){
 			
 			let modalBg = document.querySelector(".scrapDirModal");
@@ -606,7 +580,7 @@ table[class^='tbl_style'] th, table[class^='tbl_style'] td {
 			
 		}
 	
-			  
+// 스크랩 modal close 함수 		  
 		function closeBt(){
 			
 			let modalBg = document.querySelector(".scrapDirModal");
@@ -616,7 +590,7 @@ table[class^='tbl_style'] th, table[class^='tbl_style'] td {
 		}
 		
 		
-		    
+// 생년 검색 validation 함수     
 	    function validateBirthRange() {
 	        var from = $('#brthDtFrom').val(); // 시작 날짜
 	        var to = $('#brthDtTo').val(); // 종료 날짜
@@ -632,6 +606,8 @@ table[class^='tbl_style'] th, table[class^='tbl_style'] td {
 	    $(document).on('change', '.mngCheck', function () {
 	        getCheckMng();
 	    });
+	    
+	 // 함수 체크박스에 해당하는 mngNo 가져옴 
 	    function getCheckMng() {
 	    	console.log("EFEfef")
 	    	  const checkboxes = document.querySelectorAll(".mngCheck");
@@ -648,7 +624,9 @@ table[class^='tbl_style'] th, table[class^='tbl_style'] td {
 	    $(document).ready(function () {
 	        $("#scrapOpenBtn").on("click", fn_modalOn);
 	    });
-
+		 
+		 
+	 // modal on함수 스크랩 리스트 불러옴 
 	    function fn_modalOn(){
 	    	
 			let modalBg = document.querySelector(".scrapDirModal");
@@ -660,6 +638,7 @@ table[class^='tbl_style'] th, table[class^='tbl_style'] td {
 			
 	    	
 	    }
+	    // modal on 함수,  해당 user의 스크랩 리스트 불러옴 
 	    function getScrapList() {
 	        $.ajax({
 	            url: '/expert/scrapFolderList.do',
@@ -703,7 +682,7 @@ table[class^='tbl_style'] th, table[class^='tbl_style'] td {
 	            }
 	        });
 	    }
-
+	 // 체크된 인력 리스트들을 insert하는 함수 
 	    function scrapInsert() {
 	    	
 		    	const checkboxes = document.querySelectorAll('input[id="checkDir"]:checked');
