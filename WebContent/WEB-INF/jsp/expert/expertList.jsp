@@ -507,18 +507,14 @@ table[class^='tbl_style'] th, table[class^='tbl_style'] td {
            searchForm.append(pageInput);
     	   searchForm.submit();
     	 }
-// 스크랩 추가 함수 
+// 스크랩 폴더 추가 함수 
         function addScrap() {
             let url = "/expert/scrapFolder.do";
             let dir_nm = $("#dirNm").val();
             let dir_type = $("#dirType").val();
 
             console.log("값체크", dir_nm, dir_type);
-/* 
-            let data = {
-                dir_nm: dir_nm,
-                dir_type: dir_type
-            }; */
+
             $.ajax({
                 url: url,  // 삭제 처리할 URL
                 method: 'POST',
@@ -532,53 +528,9 @@ table[class^='tbl_style'] th, table[class^='tbl_style'] td {
                     alert('알 수 없는 오류로 폴더 생성에 실패했습니다.');
                 }
             });
-       /*      $.ajax({
-                url: url,
-                type: "POST",
-                data: data, // JSON.stringify(data) 대신 그냥 data 전달
-                success: function (response) {
-                    console.log(response);
-                },
-                error: function (xhr, status, error) {
-                    console.error("에러 발생:", error);
-                }
-            }); */
+
 
         }
-
-// 스크랩 modal block 함수 
-		function scrapDirModal(){
-			
-			let modalBg = document.querySelector(".scrapDirModal");
-			
-			modalBg.style.display ="block";
-			
-			
-			/* $.ajax({
-				
-                  url: '/expert/scrapFolderList.do',  // 데이터를 가져올 URL (서버 컨트롤러와 연결)
-                  method: 'GET',
-                  data: { code : largeCategory1 },  // 선택된 카테고리 값을 전송
-                  dataType: 'json',  //ww 반환되는 데이터 타입 (JSON 형식)
-                  success: function(data) {
-                      // 서버에서 데이터를 성공적으로 받았을 때 실행
-//                       $('#synbio2').html(''); // 결과를 보여줄 div 초기화
-						mediumOptions1 += '<option value="all">전체</option>';
-                      $.each(data.newBioMediumCode, function(index, item) {
-                          mediumOptions1 += '<option value="' + item.code_id + '">' + item.code_nm + '</option>';
-                      });
-                      // 중분류 셀렉트 박스에 새로 추가된 옵션 적용
-                      $('#mediumCategory1').html(mediumOptions1).trigger('change');
-                      $('#smallCategory1').val(null).trigger('change');
-                      
-                  },
-                  error: function(xhr, status, error) {
-                      // 에러가 발생했을 때 실행
-                      console.error('AJAX 에러 발생: ' + error);
-                  }
-              }); */
-			
-		}
 	
 // 스크랩 modal close 함수 		  
 		function closeBt(){
@@ -710,9 +662,9 @@ table[class^='tbl_style'] th, table[class^='tbl_style'] td {
 	    	  $.ajax({
 	    	    url: '/expert/insertScrap.do',
 	    	    method: 'POST',
-	    	    traditional: true, // ✅ 배열 전송 필수 옵션
+	    	    traditional: true, 
 	    	    data: {
-	    	      mngNoList: mngNoList,         // ✅ 변수명 일치
+	    	      mngNoList: mngNoList,       
 	    	      folderIdList: folderIdList,
 	    	      typeList : typeList
 	    	    },
