@@ -220,6 +220,15 @@
 	                            	</ul>
 	                            </td>
 	                        </tr>
+	                        <tr>
+	                            <th scope="row">중복인력 목록
+</th>
+	                            <td colspan="1" style="text-align: center;font-weight: bold;cursor: pointer;" onclick="window.open('http://localhost:8090/expert/expertDetail.do?exprt_mng_no=2565','_blank', 'width=1700px,  height=900px,top=50 left=50')">이명화</td>
+	                        <td colspan="1" style="text-align: center;font-weight: bold;cursor: pointer;">이지연</td>
+	                        <td colspan="1" style="text-align: center;font-weight: bold;cursor: pointer;">성선아</td>
+	                        <td colspan="1" style="text-align: center;font-weight: bold;cursor: pointer;">전민주</td>
+	                        <td colspan="1" style="text-align: center;font-weight: bold;cursor: pointer;">김수아</td
+	                        ></tr>
 	                    </tbody>
 	                </table>                      
 	            </div>
