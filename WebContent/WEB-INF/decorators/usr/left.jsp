@@ -31,7 +31,8 @@
 	        <p>
 		        <strong>${loginnm}님</strong>
 		        <small>${codeNm}</small>
-<!-- 		        <button class="btn btn-logout" onClick="fn_logout()">로그아웃</button> -->
+				<a href="/logout.do" class="btn btn-logout" onclick="return confirm('로그아웃하시겠습니까?');">로그아웃</a>
+		       <!--  <button class="btn btn-logout" onClick="fn_logout()">로그아웃</button> -->
 	        </p>
 	    </div>
 	</div>
@@ -63,6 +64,16 @@
                 </ul>
             </li>        
             <c:if test="${authrtCd == 'AUTH001'}">
+            <li class="menu_1depth">
+                <div onclick="location.href='/auth/authList.do'">
+                    <span class="menuName">스크랩</span><em class="icon icon_down"></em>
+                </div>
+                <ul>
+                    <li class="menu_2depth" onclick="location.href='/auth/authList.do'">
+                        
+                    </li>
+                </ul>
+            </li>
             <li class="menu_1depth">
                 <div onclick="location.href='/auth/authList.do'">
                     <span class="menuName">권한관리</span><em class="icon icon_down"></em>
