@@ -1,5 +1,6 @@
 package bpsim.module.dao;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -39,5 +40,20 @@ public interface BpsimCommon {
 	Map getAccessInfo(String queryId, Map params) throws SQLException;
 		
 	int insertData(String string, Map params) throws SQLException;
-		
-}
+
+	String insertScrapFolder(String queryId, Map<String, Object> result)throws SQLException;
+
+	
+//	List<Map<String, Object>> getFolderList(Map<String, Object> paramMap);
+//
+//	List<Map<String, Object>> getFolderList(String queryId, Map<String, Object> paramMap) throws SQLException;
+	// 전문가 PDF 하나 생성
+	//public File generateExpertPDFFile(Map expert) throws Exception;
+
+	List<Map<String, Object>> getFolderList(String queryId, Map<String, Object> paramMap) throws SQLException;
+
+	void insertScrap(String queryId, Map<String, Object> paramMap) throws SQLException;
+	
+	int getScrapCount(String queryId, Map args) throws SQLException;
+	
+}                        

@@ -1,5 +1,6 @@
 package bpsim.module.dao;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -97,4 +98,38 @@ public class AuthCheckService extends AbstractDao implements BpsimCommon{
 	public int insertData(String string, Map params) throws SQLException {
 		return 0;
 	}
+
+	@Override
+	public String insertScrapFolder(String queryId, Map<String, Object> result) throws SQLException {
+		return (String) regist(queryId, result); 
+	}
+
+	@Override
+	public List<Map<String, Object>> getFolderList(String queryId, Map<String, Object> paramMap) throws SQLException {
+		// TODO Auto-generated method stub
+		return super.getList(queryId, paramMap);
+	}
+
+	@Override
+	public void insertScrap(String queryId, Map<String, Object> paramMap) throws SQLException {
+		
+		regist(queryId, paramMap); 
+	}
+
+	@Override
+	public int getScrapCount(String queryId, Map args) throws SQLException {
+		return getCount(queryId, args);
+	}
+
+	/*@Override
+	public File generateExpertPDFFile(Map expert) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}*/
+
+	/*
+	 * @Override public List<Map<String, Object>> getFolderList(String queryId,
+	 * Map<String, Object> paramMap) throws SQLException { return
+	 * super.getList(queryId, paramMap); }
+	 */
 }

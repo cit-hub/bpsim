@@ -1,17 +1,23 @@
 package bpsim.module.dao;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import java.util.HashMap;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
+import com.sun.javafx.font.FontFactory;
 
 import bpsim.framework.dao.AbstractDao;
+import kr.dogfoot.hwplib.object.bodytext.paragraph.Paragraph;
 
 @Component("bpsimCommonService")
 public class BpsimCommonService extends AbstractDao implements BpsimCommon{
@@ -89,4 +95,88 @@ public class BpsimCommonService extends AbstractDao implements BpsimCommon{
 	public int insertData(String queryId, Map args) throws SQLException {
 		return (int) regist( queryId,  args);
 	}
+
+	@Override
+	public String insertScrapFolder(String queryId, Map<String, Object> result) throws SQLException {
+		
+		return (String) regist(queryId, result);
+	}
+
+	@Override
+	public List<Map<String, Object>> getFolderList(String queryId,Map<String, Object> paramMap) throws SQLException {
+		return getList(queryId, paramMap);
+	}
+//
+//	@Override
+//	public List<Map<String, Object>> getFolderList(Map<String, Object> paramMap) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+
+	@Override
+	public void insertScrap(String queryId, Map<String, Object> paramMap) throws SQLException  {
+		
+			regist(queryId, paramMap);
+			
+		}
+
+	@Override
+	public int getScrapCount(String queryId, Map args) throws SQLException {
+			return getCount(queryId, args);
+	}
+
+
+
+
 }
+
+
+	
+
+	/*@Override
+	// 전문가 PDF 하나 생성
+	public File generateExpertPDFFile(Map expert) throws Exception {
+	    String name = (String) expert.get("EXPRT_NM");
+	    String fileName = "expert_" + name + "_" + System.currentTimeMillis() + ".pdf";
+	    File file = File.createTempFile(fileName, null);
+
+	    Document doc = new Document(PageSize.A4);
+	    PdfWriter.getInstance(doc, new FileOutputStream(file));
+	    doc.open();
+
+	    Font font = FontFactory.getFont(FontFactory.HELVETICA, 12);
+
+	    doc.add(new Paragraph("이름: " + name, font));
+	    doc.add(new Paragraph("성별: " + expert.get("EXPRT_GNDR"), font));
+	    doc.add(new Paragraph("소속: " + expert.get("OGDP_NM"), font));
+	    doc.add(new Paragraph("직책: " + expert.get("JBPS_NM"), font));
+	    // ... 필요 항목 추가
+
+	    doc.close();
+	    return file;
+	}
+	// ZIP으로 묶기
+	public File makeExpertZipFile(List<File> pdfFiles) throws Exception {
+	    File zipFile = File.createTempFile("expert_data_", ".zip");
+
+	    ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile));
+
+	    for (File pdf : pdfFiles) {
+	        FileInputStream fis = new FileInputStream(pdf);
+	        ZipEntry entry = new ZipEntry(pdf.getName());
+	        zos.putNextEntry(entry);
+
+	        byte[] buffer = new byte[1024];
+	        int len;
+	        while ((len = fis.read(buffer)) > 0) {
+	            zos.write(buffer, 0, len);
+	        }
+
+	        zos.closeEntry();
+	        fis.close();
+	    }
+
+	    zos.close();
+	    return zipFile;
+	}*/
+
