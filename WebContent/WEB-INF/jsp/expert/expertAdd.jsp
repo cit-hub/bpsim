@@ -18,8 +18,12 @@
     
 	
 	function fn_excelDown(){
+		alert("FEEFEF")
+		let url2 ="dfdfdfd"
 	    var url = "/expert/excelFormDown.do";
-	    window.open(url, '_blank');
+	    console.log(url)
+	    //window.open(url, '_blank');
+	    location.href="/expert/excelFormDown.do"
 	}
 	function fn_submit(){
 		var fileInput = $("#uploadName").val();

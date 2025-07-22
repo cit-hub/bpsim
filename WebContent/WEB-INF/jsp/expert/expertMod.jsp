@@ -222,8 +222,14 @@
 	                        </tr>
 	                        <tr>
 	                            <th scope="row">비고</th>
-	                            <td colspan="8">
+	                            <td colspan="3">
 	                                <input type="text" id="" class="infoInputBox" name="rmrk_cn" class="" style="width: 68.5%;" value="${expert.rmrk_cn}">
+	                            </td>
+	                            <th scope="row">최초 수정일자</th>
+	                            <td colspan="3">
+	                               <div class="input_box type_date">
+	                                    	<input type="date" id="" name="last_mdfcn_dt"   data-placeholder="수정일자 선택" aria-required="true" title="수정일자 선택" value="${expert.last_mdfcn_dt}" max="9999-12-31" onblur="checkAllEmptyData()">
+		                            	</div>
 	                            </td>
 	                        </tr>
 	                        <tr>
@@ -232,7 +238,7 @@
 	                                <ul class="errLine" id="errorList1">
 						            </ul>
 	                            </td>
-	                        </tr><tr>
+	                     	   </tr><tr>
 	                            <td colspan="8">
 	                            	<ul class="errLine" id="errorList2">
 	                            	</ul>

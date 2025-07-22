@@ -10,7 +10,49 @@
 		display: inline-block;
     	float: right;
 	}
+	
+	.rpNd{
+		display: flex !important;
+		align-items: center;
+	}
+	.rpNm{
+		margin-right: 10px;
+		font-weight: bold;
+		font-size: 14px;
+		color:#333 !important;
+	}
+	.rpText{
+		margin-top: 25px;
+	}
+	.rppBox {
+		    margin-top: 40px;
+		margin-left: 15px;
+	}
+	.rpDate{
+		font-size: 13px;
+	
+	}
+	.rpSub{
+		margin-top: 10px;
+    	font-size: 1.3rem;
+    	color:#333 !important;
+	}
+	.rpContent{
+		    margin-top: 30px;
+		        margin-bottom: 50px !important;
+	
+	}
+	.rpDel{
+		    color: #ea1a1a;
+    margin-left: 10px;
+    font-size: 13px;
+}
+	
+	}
 	</style>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	
 	<script>
 	$(document).ready(function() {
 		
@@ -40,15 +82,57 @@
 		}
 	 	e.preventDefault();
 	}
+	// 전문가 상세정보 PDF 저장하기
+	function savePDF() {
+	  const element = document.querySelector(".content");
+	  const hideElements = document.querySelector("#btnHide");
+	  const hideElements3 = document.querySelector(".txt_right");
+	  const hideElements2 = document.querySelector("#btnHide2");
+	  const hideElements4 = document.querySelector(".rpBox");
+
+	  // 1️⃣ 모든 숨길 요소 숨기기
+	  hideElements.style.display = "none";
+	  hideElements2.style.display = "none";
+	  hideElements3.style.display = "none";
+	  hideElements4.style.display = "none";
+
+	  html2canvas(element, {
+	    scale: 5,
+	    useCORS: true
+	  }).then(function (canvas) {
+	    const imgData = canvas.toDataURL("image/png");
+	    const pdf = new jspdf.jsPDF("p", "mm", "a4");
+
+	    // 이미지 크기 조절
+	    const pdfWidth = pdf.internal.pageSize.getWidth();
+	    const pdfHeight = (canvas.height * pdfWidth) / canvas.width * 1.2;
+
+	    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+	    // PDF 파일 저장
+	    pdf.save("전문인력_상세화면.pdf");
+
+	    // 2️⃣ 캡처 후 다시 보이게!
+	    hideElements.style.display = "block";
+	    hideElements2.style.display = "block";
+	    hideElements3.style.display = "inline-block";
+	    hideElements4.style.display = "inline-block";
+	  });
+	}
+
 	
+
 	</script>
 </head>
 <body>
 	<div class="contentBox">
 	    <div class="content">
 	        <div class="cnt_title">
-	            <h1>전문인력 상세화면</h1> 
+	            <h1>전문인력 상세화면</h1>
+	              
 	        </div>
+	       
+			<%-- <div>${expert}</div> --%>
 	        
 	        <form action="/expert/expertInfoConfirm.do" method="POST" id="confirmManeger" enctype="multipart/form-data">
 				<input type="hidden" name="exprt_mng_no" 		value="${expert.exprt_mng_no}"/>
@@ -56,8 +140,9 @@
 				<input type="hidden" name="back_params" 		value="${back_params}"/>
 				<input type="hidden" name="exprt_nm" 	id="exprt_nm"	value="${expert.exprt_nm}"/>
 			</form>
-			<div style="display: flex; justify-content: end;">
-                <button class="btn btn-task-type1" onclick="goExpertList()">목록</button>
+			<div style="display: flex;justify-content: space-between;">
+			 <button type="button"id="btnHide" class="btn btn-task-type2"onclick="savePDF()">PDF저장</button>
+                <button class="btn btn-task-type1" id="btnHide2" onclick="goExpertList()">목록</button>
             </div>
 	        <div class="cnt_box">
 	            <div class="cnt_inner">
@@ -100,10 +185,24 @@
 	                                    </div>
 	                                    <div class="txt_right">
 	                                    	<c:if test="${loginInfo.authrtCd eq 'AUTH001' || loginInfo.authrtCd eq 'AUTH002'}">
-	                                        <button type="button" class="btn btn-task-type2" onclick="confirmManeger()">담당자 확인</button>
-	                                        <button type="button" class="btn btn-reject" onclick="deleteExpertInfo()">삭제</button>
-	                                        <button type="button" class="btn" onclick="updateAction()">수정</button>
+	                                        <button type="button" class="btn btn-task-type2" id="btnHide3" onclick="confirmManeger()">담당자 확인</button>
+	                                        <button type="button" class="btn btn-reject"id="btnHide4" onclick="deleteExpertInfo()">삭제</button>
+	                                        <button type="button" class="btn"id="btnHide5" onclick="updateAction()">수정</button>
 	                                    	</c:if>
+	                                    </div>
+	                                </td>
+	                            </tr>
+	                            <tr>
+                           	    	<th scope="row">최초 등록자</th>
+	                                <td colspan="3" style="padding-top: 3px;">
+	                               		 <div>
+		                                        <span>${expert.frst_red_nm}</span>
+                                        </div>
+	                                </td>
+                            	    <th scope="row">최초 등록일</th>
+	                                <td colspan="4" style="padding-top: 3px;">
+                                    	  <div style="display: inline-block;padding-top: 6px;">
+                                          <span><fmt:formatDate value="${expert.frst_reg_dt}" pattern="yyyy-MM-dd"/></span>
 	                                    </div>
 	                                </td>
 	                            </tr>
@@ -499,7 +598,42 @@
 	                </table>
 	            </div>
 	        </div>
+	   		<div class="rpContent">
+	   			<div class="rpBox">
+	   				<div style="
+   								 font-size: 1.6rem;
+   								 margin-bottom : 20px;
+   								 margin-left:5px;
+  								 font-weight: bold;
+  								 color:#333 !important;
+	   				"> 댓글 2</div>
+	   				<input type="text" style="width:1584px; height: 35px;" placeholder="댓글을 입력하세요.">
+	   				<div class="rppBox">
+	   					<div class="rpText">
+	   						<div class="rpNd">
+		   						<div class="rpNm">관리자</div>
+		   						<div class="rpDate">2025-06-10 13:25</div>	
+		   						<div class="rpDel">삭제</div>	   						
+	   						</div>
+	   						<div class="rpSub">정보 수정 필요해 보입니다.</div>
+	   					</div>
+	   					<div class="rpText">
+	   						<div class="rpNd">
+		   						<div class="rpNm">관리자</div>
+		   						<div class="rpDate">2025-06-10 13:25</div>	   						
+	   						</div>
+	   						<div class="rpSub">중분류 수정 부탁드립니다.</div>
+	   					</div>
+	   				</div>
+	   			
+	   			</div>	
+	   		
+	   		</div>
+	   
+	   
 	    </div>
 	</div>
 </body>
+
+
 </html>

@@ -195,6 +195,7 @@
 	                                <input type="text" id="" class="infoInputBox" name="rmrk_cn" class="" style="width: 68.5%;" value="${expert.rmrk_cn}">
 	                            </td>
 	                        </tr>
+	                        
 	                        <tr>
 	                            <th scope="row" rowspan="2">인적사항 검증결과</th>
 	                            <td colspan="8">
@@ -206,7 +207,9 @@
                                 	</c:forEach>
 						            </ul>
 	                            </td>
-	                        </tr><tr>
+	                        </tr>
+	                        
+	                        <tr>
 	                            <td colspan="8">
 	                            	<ul class="errLine" id="errorList2">
 	                            	<c:forEach items="${infoErrList}" var="err" varStatus="status">
