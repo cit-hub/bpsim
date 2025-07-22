@@ -64,6 +64,22 @@ public class LoginController {
 	
 	}
 	
+	/* 로그아웃  */
+	@RequestMapping("/logout.do")
+	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) throws Throwable {
+		
+		
+		ModelAndView mav = new ModelAndView();
+		
+		HttpSession session = request.getSession();
+		
+		session.invalidate();
+		
+		mav.setViewName("redirect:/expert/expertList.do");
+
+		return mav;
+	
+	}
 	@RequestMapping(value="/loginChk.do", method = RequestMethod.POST)
 	public ModelAndView loginChk(HttpServletRequest request, HttpServletResponse response) throws Throwable {
 		HttpSession session   = request.getSession(true);

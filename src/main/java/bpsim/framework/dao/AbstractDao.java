@@ -55,5 +55,7 @@ public class AbstractDao extends SqlMapClientDaoSupport implements Dao{
 		
 		return dataList;
 	}
+
+	
 	
 }
